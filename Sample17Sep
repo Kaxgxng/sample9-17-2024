@@ -1,0 +1,101 @@
+ void setup() {
+    size(500, 500);
+    strokeWeight(12);
+    background(255);
+
+
+    int[][] grid = {{3, 2, 1, 3}, {3, 4, 1, 2}, {2, 1, 3, 4}};
+    int[][] grid2 = {{1, 1, 1, 1}, {2, 2, 2, 2}, {3, 3, 3, 3}};  
+
+
+    matrix_cal(grid, grid2, 1); 
+
+    int rows = grid.length;
+    int cols = grid[0].length;
+
+    int w = width / cols;
+    int h = height / rows;
+
+    update(grid, -1);  // ลดค่าของ grid ลง 1
+    int i = 0;
+    while (i < rows) {
+        int j = 0;
+        while (j < cols) {
+            draw_lines(10 + j * w, 10 + i * h, grid[i][j]);
+            println(i, j, grid[i][j]);
+            j++;
+        }
+        i++;
+    }
+}
+
+
+void update(int[][] a, int d) {
+    int i = 0;
+    while (i < a.length) {
+        int j = 0;
+        while (j < a[0].length) {
+            a[i][j] = a[i][j] + d;
+            j++;
+        }
+        i++;
+    }
+}
+
+
+void draw_lines(int x, int y, int n) {
+    int i = 0;
+    while (i < n) {
+        line(x + i * 20, y, x + i * 20, y + 40);
+        i++;
+    }
+}
+
+
+void matrix_cal(int[][] a, int[][] b, int operation) {
+    int rows = a.length;
+    int cols = a[0].length;
+
+
+    int[][] result = new int[rows][cols];
+
+    if (operation < 1 || operation > 3) {
+        println("การคำนวณไม่ถูกต้อง กรุณาใช้ 1 (add), 2 (subtract), หรือ 3 (multiply)");
+        return;
+    }
+
+
+    if (operation == 1 || operation == 2) {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (operation == 1) {
+                    result[i][j] = a[i][j] + b[i][j];
+                } else {
+                    result[i][j] = a[i][j] - b[i][j];
+                }
+            }
+        }
+    }
+
+    if (operation == 3) {
+        int[][] resultMul = new int[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                resultMul[i][j] = 0;
+                for (int k = 0; k < a[0].length; k++) {
+                    resultMul[i][j] += a[i][k] * b[k][j];
+                }
+            }
+        }
+        result = resultMul;
+    }
+
+  
+    println("ผลลัพธ์ของการคำนวณแบบ " + (operation == 1 ? "บวก" : (operation == 2 ? "ลบ" : "คูณ")) + ":");
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            print(result[i][j] + "\t");
+        }
+        println();
+    }
+}
